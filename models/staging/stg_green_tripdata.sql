@@ -3,7 +3,7 @@
 with tripdata as 
 (
   select *,
-    row_number() over(partition by lpep_pickup_datetime) as rn
+    row_number() over(partition by cast(vendorid as integer), lpep_pickup_datetime) as rn
   from {{ source('staging','green_tripdata') }}
   where vendorid is not null 
 )
@@ -39,5 +39,4 @@ select
     cast(congestion_surcharge as numeric) as congestion_surcharge
 from tripdata
 where rn = 1
-
 
